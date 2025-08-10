@@ -25,12 +25,23 @@ class MorseCodeTest extends AnyFunSuite with TryValues:
   }
   // Test: input morse code [] should translation to a Letter [A-Z]
   test("valid morse code should return valid upper case letter") {
-    val results = TransformStringForTranslator("-.-. .- - ... / .- .-. . / -.-. --- --- .-.. !")
+    val results = TransformStringForTranslator("-.-. .- - ... / .- .-. . / -.-. --- --- .-.. -.-.--")
     assert(results == "CATS ARE COOL!")
   }
 
   // Test: input morse code [] should translation to a Letter [A-Z]
   test("valid multiple letters should return valid morse code") {
     val results = TransformStringForTranslator("CATS are cool! ")
-    assert(results == "-.-. .- - ... / .- .-. . / -.-. --- --- .-.. ! /")
+    assert(results == "-.-. .- - ... / .- .-. . / -.-. --- --- .-.. -.-.-- /")
+  }
+  // Test: input morse code [] should translation to a Letter [A-Z]
+  test("valid multiple letters with some punctuations should return valid morse code") {
+    val results = TransformStringForTranslator("Cats aren't big animals!")
+    assert(results == "-.-. .- - ... / .- .-. . -. .--.-. - / -... .. --. / .- -. .. -- .- .-.. ... -.-.--")
+  }
+
+  // Test: input morse code [] with letters / punctuation should translation to a Letter [A-Z] & punctuation
+  test("valid morse code containing punctuations should return valid letters and punctuations") {
+    val results = TransformStringForTranslator("-.-. .- - ... / .- .-. . -. .--.-. - / -... .. --. / .- -. .. -- .- .-.. ... -.-.--")
+    assert(results == "CATS AREN'T BIG ANIMALS!")
   }
