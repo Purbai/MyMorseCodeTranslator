@@ -1,23 +1,31 @@
-import scala.util.{Try, Success, Failure}
+import scala.util.{Failure, Success, Try}
 import scala.io.StdIn.readLine
 import scala.util.chaining.scalaUtilChainingOps
+import scala.util.control.Breaks.{break, breakable}
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 object myTranslatorApp {
   def main(args: Array[String]): Unit = {
-    // get input
-    val myTransString = InputHandler().toUpperCase
-    OutputHandler(TransformStringForTranslator(myTransString))
-
+    breakable {
+      while (true) {
+        // get input
+        val myTransString = InputHandler().toUpperCase
+        if (myTransString.toUpperCase == "EXIT") {
+          OutputHandler("Good bye")
+          break
+        }
+        OutputHandler("Your translated is: "+TransformStringForTranslator(myTransString))
+      }
+    }
   }
 
   def InputHandler(): String = {
-    println("Enter text to be translated - please enter exit at the end input:")
+    println("Enter text to be translated - please enter exit to quit app:")
     scala.io.StdIn.readLine()
   }
 
   def OutputHandler(transtring: String): Unit = {
-    println("Your string is translated to: " + transtring)
+    println(transtring)
   }
 
   def TransformStringForTranslator(myString: String): String = {
@@ -54,7 +62,7 @@ object myTranslatorApp {
       'M' -> "--", 'N' -> "-.", 'O' -> "---", 'P' -> ".--.",
       'Q' -> "--.-", 'R' -> ".-.", 'S' -> "...", 'T' -> "-",
       'U' -> "..-", 'V' -> "...-", 'W' -> ".--", 'X' -> "-..-",
-      'Y' -> "-.--", 'Z' -> "--..", ' ' -> "/",'.' -> ".-.-.-",
+      'Y' -> "-.--", 'Z' -> "--..", ' ' -> "/", '.' -> ".-.-.-",
       ',' -> "--..--", '?' -> "..--..", '!' -> "-.-.--", ':' -> "---...",
       ';' -> "-.-.-.", '\'' -> ".--.-.", '"' -> ".-..-..-"
     )
