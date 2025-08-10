@@ -1,49 +1,52 @@
 import scala.util.{Try, Success, Failure}
 import scala.io.StdIn.readLine
+import scala.util.chaining.scalaUtilChainingOps
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 object myTranslatorApp {
   def main(args: Array[String]): Unit = {
-
-    val myTransString = InputHandler()
-    //    val myTransString = "my translated string"
-    //    val myString = "ABC"
-
-    val myNewString = myTransString.split("\\s+").map(Translator).mkString(" ")
-
-    OutputHandler(myNewString)
-    //println("my new string :"+myNewString)
-
+    // get input
+    val myTransString = InputHandler().toUpperCase
+    OutputHandler(TransformStringForTranslator(myTransString))
 
   }
 
   def InputHandler(): String = {
-    println("Enter text to translate into - please enter exit at the end input:")
+    println("Enter text to be translated - please enter exit at the end input:")
     scala.io.StdIn.readLine()
-    //println("The following string will be translated: " + stringToTranslate)
-
   }
 
   def OutputHandler(transtring: String): Unit = {
-    println("Your string is translated to: "+ transtring)
+    println("Your string is translated to: " + transtring)
   }
 
-  def Translator(stringToTranslate: String): String = {
+  def TransformStringForTranslator(myString: String): String = {
+    // translate the input - split the string by each space encountered
+    val isMorseCode = myString.matches(".*[A-Za-z].*")
+    if (!isMorseCode) {
+      myString
+        .split("\\s+")
+        .map(c => Translator(c, isMorseCode))
+        .mkString
+    }
+    else {
+      myString
+        .map(c => Translator(c.toString, isMorseCode))
+        .mkString(" ") // add a space between each letter translation
+    }
+  }
 
-    //TestCode().getOrElse(stringToTranslate.toUpper, "?")
+  def Translator(stringToTranslate: String, isMorseCode: Boolean): String = {
     val codeMap = MorseCode()
-    if (stringToTranslate.toString.matches("[A-Za-z]")) {
+    if (isMorseCode) {
+      // there is only one char since we are looping round each letter in the string
       codeMap.getOrElse(stringToTranslate.toUpperCase.charAt(0), stringToTranslate)
     } else {
-
-      codeMap.find(_._2.equalsIgnoreCase(stringToTranslate)).map(_._1.toString).getOrElse(" ")
+      codeMap.find(_._2.equalsIgnoreCase(stringToTranslate)).map(_._1.toString).getOrElse(stringToTranslate)
     }
-
-
-
   }
 
-
-  def MorseCode(): Map[Char,String] = {
+  def MorseCode(): Map[Char, String] = {
     val morseCode: Map[Char, String] = Map(
       'A' -> ".-", 'B' -> "-...", 'C' -> "-.-.", 'D' -> "-..",
       'E' -> ".", 'F' -> "..-.", 'G' -> "--.", 'H' -> "....",
@@ -55,7 +58,4 @@ object myTranslatorApp {
     )
     morseCode
   }
-
 }
-
-
