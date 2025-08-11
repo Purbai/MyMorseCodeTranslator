@@ -9,9 +9,10 @@ object myTranslatorApp {
     breakable {
       while (true) {
         // get input
+        OutputHandler("Enter text/code to be translated or enter exit to quit : ")
         val myTransString = InputHandler().toUpperCase
         if (myTransString.toUpperCase == "EXIT") {
-          OutputHandler("Good bye")
+          OutputHandler("Thank you for using the translator - Good bye")
           break
         }
         OutputHandler("Your translated is: "+TransformStringForTranslator(myTransString))
@@ -20,8 +21,7 @@ object myTranslatorApp {
   }
 
   def InputHandler(): String = {
-    println("Enter text to be translated - please enter exit to quit app:")
-    scala.io.StdIn.readLine()
+        scala.io.StdIn.readLine()
   }
 
   def OutputHandler(transtring: String): Unit = {
